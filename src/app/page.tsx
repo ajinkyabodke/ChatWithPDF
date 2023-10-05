@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import FileUpload from "@/components/fileUpload";
 import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs";
 import { LogIn } from "lucide-react";
@@ -16,12 +17,12 @@ export default async function Home() {
         {/* Div to center all the content */}
         <div className="flex flex-col items-center text-center">
           <div className="flex items-center">
-            <h1 className="mr-3 text-5xl font-semibold">Chat with any PDF</h1>
+            <h1 className="mr-3 text-5xl font-semibold">Chat with your PDF</h1>
             <UserButton afterSignOutUrl="/"></UserButton>
           </div>
 
           <div className="flex mt-2">
-            {/* conditionally rendering the buuton,only when the user is signed in */}
+            {/* conditionally rendering the button,only when the user is signed in */}
             {isAuth && <Button>Go to Chats</Button>}
           </div>
 
@@ -31,8 +32,9 @@ export default async function Home() {
           </p>
 
           <div className="w-full mt-4">
+            {/* conditionally rendering the section,only when the user is signed in */}
             {isAuth ? (
-              <h1>fileupload</h1>
+              <FileUpload />
             ) : (
               <Link href="/sign-in">
                 <Button>
