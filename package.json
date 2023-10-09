@@ -12,7 +12,7 @@
     "@clerk/nextjs": "^4.25.1",
     "@neondatabase/serverless": "^0.6.0",
     "@radix-ui/react-slot": "^1.0.2",
-    "@tanstack/react-query": "^4.35.7",
+    "@tanstack/react-query": "^4.36.1",
     "aws-sdk": "^2.1469.0",
     "axios": "^1.5.1",
     "class-variance-authority": "^0.7.0",
