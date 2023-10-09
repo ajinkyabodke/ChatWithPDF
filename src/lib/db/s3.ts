@@ -1,26 +1,30 @@
 import AWS from "aws-sdk";
-require("dotenv").config(".env");
 
 export async function uploadToS3(file: File) {
+  if (
+    !process.env.NEXT_PUBLIC_AWS_ACCESS_KEY ||
+    !process.env.NEXT_PUBLIC_AWS_SECRET_KEY ||
+    !process.env.NEXT_PUBLIC_AWS_BUCKET_NAME
+  ) {
+    throw new Error("AWS credentials not set");
+  }
   try {
     AWS.config.update({
-      accessKeyId: process.env.AWS_ACCESS_KEY,
-      secretAccessKey: process.env.AWS_SECRET_KEY,
+      accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY,
+      secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_KEY,
     });
     const s3 = new AWS.S3({
       params: {
-        Bucket: process.env.BUCKET_NAME,
+        Bucket: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME,
       },
       region: "ap-south-1",
     });
-    console.log(process.env.AWS_ACCESS_KEY);
-    console.log(process.env.AWS_SECRET_KEY);
-    console.log(process.env.BUCKET_NAME);
+
     const file_key =
       "uploads/" + Date.now().toString() + file.name.replace(" ", "-");
 
     const params = {
-      Bucket: process.env.BUCKET_NAME!, //! - to mention to system that it wont be null
+      Bucket: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME!, //! - to mention to system that it wont be null
       Key: file_key,
       Body: file,
     };
@@ -51,6 +55,6 @@ export async function uploadToS3(file: File) {
 
 export function getS3Url(file_key: string) {
   //utitility function to access the S3 URL from the file key itself
-  const url = `https://${process.env.BUCKET_NAME}.s3.ap-south-1.amazonaws.com/${file_key}`;
+  const url = `https://${process.env.NEXT_PUBLIC_AWS_BUCKET_NAME}.s3.ap-south-1.amazonaws.com/${file_key}`;
   return url;
 }
