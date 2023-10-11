@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import React from "react";
 import { eq } from "drizzle-orm";
 import PDFViewer from "@/components/PDFViewer";
+import ChatComponent from "@/components/ChatComponent";
 
 type Props = {
   params: {
@@ -42,8 +43,8 @@ const ChatPage = async ({ params: { chatId } }: Props) => {
       </div>
       {/* chat component */}
       <div className="flex-[3] border-l-4 border-l-slate-200">
-        {/* Content of your chat component */}
-      </div>
+          <ChatComponent chatId={parseInt(chatId)} />
+        </div>
     </div>
   );
 };
