@@ -104,9 +104,14 @@ import {
   RecursiveCharacterTextSplitter,
 } from "@pinecone-database/doc-splitter";
 import { getEmbeddings } from "../embeddings";
-import { convertToAscii } from "../utils";
+import { PINECONEINDEXNAME, convertToAscii } from "../utils";
 
 export const getPineconeClient = () => {
+  console.log(`env:`, [
+    process.env.PINECONE_ENVIRONMENT,
+    process.env.PINECONE_API_KEY,
+  ]);
+
   return new Pinecone({
     environment: process.env.PINECONE_ENVIRONMENT!,
     apiKey: process.env.PINECONE_API_KEY!,
@@ -138,12 +143,14 @@ export async function loadS3IntoPinecone(fileKey: string) {
   const vectors = await Promise.all(documents.flat().map(embedDocument));
 
   // 4. upload to pinecone
-  const client = await getPineconeClient();
-  const pineconeIndex = await client.index("chatwithpdf");
+  const client = getPineconeClient();
+  const pineconeIndex = client.index(PINECONEINDEXNAME);
   const namespace = pineconeIndex.namespace(convertToAscii(fileKey));
 
   console.log("inserting vectors into pinecone");
-  await namespace.upsert(vectors);
+  await namespace.upsert(vectors).catch((e) => {
+    throw e;
+  });
 
   return documents[0];
 }
